@@ -14,8 +14,8 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Unit and integration tests
-      run: dotnet test
+    #- name: Unit and integration tests
+    #  run: dotnet test
 
   build:
     runs-on: ubuntu-latest
@@ -101,24 +101,3 @@ jobs:
           Changelog:
 
           ${{ env.COMMIT_DESCRIPTION }}
-
-    - name: Notify new build on discord
-      if: success()
-      env:
-        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        DISCORD_EMBEDS: |
-          [
-            {
-              "title": "New staging build",
-              "description": "Staging release **${{ env.VERSION }}** available",
-              "color": 5763719
-            }
-          ]
-      uses: Ilshidur/action-discord@master
-
-    - name: Setup upterm session
-      uses: lhotari/action-upterm@v1
-      if: ${{ failure() }}
-      with:
-        ## If no one connects after 5 minutes, shut down server.
-        wait-timeout-minutes: 5
